@@ -1,0 +1,76 @@
+#Importamos librerías
+import numpy as np
+import sympy as sp
+
+#____________Ejercicio 19____________
+
+# _* 19 a) *_
+
+#Generamos las filas de la matriz que nos dan
+a_1 = np.array([0.16, 0.10])
+a_2 = np.array([0.17, 0.11])
+a_3 = np.array([2.02, 1.29])
+
+#Generamos las filas del vector y
+y_1 = np.array([0.26])
+y_2 = np.array([0.28])
+y_3 = np.array([3.31])
+                
+#Formamos a la matriz A
+A = np.vstack((a_1,a_2,a_3))
+
+#Formamos al vector y
+v_y = np.vstack([y_1, y_2, y_3]) 
+ 
+#Definimos al vector x
+x1, x2 = sp.symbols('x1 x2') #Esto nos va a permitir que Pyhton reconozca a las entradas
+v_x = np.array([[x1], 
+                [x2]])
+
+# Definimos y resolvemos el problema de mínimos cuadrados
+v_x, residuals, rank, s = np.linalg.lstsq(A, v_y, rcond=None)
+
+# Obtenemos los valores de x1 y x2
+# flatten() convierte coef a una lista de valores, de otra manera solo nos 
+#aparece x1 y x2
+x1, x2 = v_x.flatten()  
+
+print("El valor de x1 es:", x1)
+print("El valor de x2 es:", x2)
+
+
+# _* 19 b) *_
+
+#Basta simplemente con cambiarel vector v_y por el vecctor b
+#Para esto renombraremos la variables x1 y x2 cono z1 y z2
+
+
+#Generamos las filas del vecctor b
+b_1 = np.array([0.27])
+b_2 = np.array([0.25])
+b_3 = np.array([3.33])
+
+#Formamos al vector b
+v_b = np.vstack([b_1, b_2, b_3])
+
+#Definimos a un vector x diferente para que nos guarde el resultado
+#Definimos al vector x
+z1, z2 = sp.symbols('z1 z2') #Esto nos va a permitir que Pyhton reconozca a las entradas
+v_z = np.array([[z1], 
+                [z2]])
+
+v_z, residuals, rank, s = np.linalg.lstsq(A, v_b, rcond=None)
+z1, z2 = v_z.flatten() 
+
+print("El valor de x1 con la perturbación es:", z1)
+print("El valor de x2 con la perturbación es:", z2)
+
+
+# _* 19 c) *_
+
+# Observamos que hay una diferencia de valores importante y esto es debido a la 
+#Perturbación del vector b. El método de mínimos cuadrados busca minimizar el 
+#error entre los valores observados (el vector b o el vector y) y los valores
+#estimados. Entonces en el momento en el que se introdujo la perturbación el 
+#modelo lineal se ajustará a los valores observados (en nuestro caso el vector b)
+# y así minimizar los errores respecto a las nuevas observaciones.
